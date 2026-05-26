@@ -1,38 +1,33 @@
 import { motion } from 'framer-motion'
-import { Gauge, Cpu, BrainCircuit, Truck } from 'lucide-react'
+import { Gauge, Cpu, BrainCircuit, ArrowRight } from 'lucide-react'
 
 const solutions = [
   {
     icon: Gauge,
     number: '01',
-    title: 'Monitoreo de Precisión en Tiempo Real',
+    title: 'SynecT Vision — visibilidad in situ',
     description:
-      'Ecosistemas propios para medir variables críticas con extrema precisión. Monitoreo de niveles en tanques químicos, gestión de stock exacta y mitigación de riesgos productivos.',
-    tags: ['Hardware SynecT', 'Tanques químicos', 'Alertas instantáneas'],
+      'Reemplazá medidores físicos por pantallas industriales con visibilidad inmediata. Baja inversión inicial, alta tangibilidad y bases listas para escalar.',
+    tags: ['Adquisición in situ', 'Tiempo real', 'Prueba de valor'],
+    cta: { href: '#ecosistema-vision', label: 'Ver SynecT Vision' },
   },
   {
     icon: Cpu,
     number: '02',
-    title: 'Integración y Telemetría de PLCs',
+    title: 'Connect + Insight — datos y análisis',
     description:
-      'Nos conectamos a la médula espinal de la industria. Extraemos datos directamente de PLCs en líneas de producción para generar telemetría robusta y flujo constante de información.',
-    tags: ['Modbus / OPC-UA', 'Líneas productivas', 'Data pipeline'],
+      'Almacenamiento soberano con SynecT Connect y dashboards con KPIs en SynecT Insight. Del historial confiable a la información que impulsa decisiones.',
+    tags: ['Datacenter propio', 'Dashboards KPI', 'Históricos'],
+    cta: { href: '#ecosistema-connect', label: 'Ver Connect + Insight' },
   },
   {
     icon: BrainCircuit,
     number: '03',
-    title: 'Inteligencia Artificial Predictiva',
+    title: 'SynecT Intell — IA predictiva',
     description:
-      'Nuestro motor de IA aprende ininterrumpidamente de los patrones operativos. Optimiza procesos, mejora diagnósticos de forma autónoma y previene fallas antes de que impacten la producción.',
-    tags: ['ML propio', 'Diagnóstico autónomo', 'Prescriptivo'],
-  },
-  {
-    icon: Truck,
-    number: '04',
-    title: 'ORION Fleet Control',
-    description:
-      'Plataforma de monitoreo de flotas con mapa en vivo, analítica de telemetría y caja negra. Corre nativamente en dispositivos SynecT — tracking, alertas y score de choferes.',
-    tags: ['Mapa en vivo', 'Caja negra', 'Score de choferes'],
+      'Mantenimiento predictivo, optimización automática de procesos y detección avanzada de anomalías. De reaccionar a anticipar — con ROI medible.',
+    tags: ['Mantenimiento predictivo', 'Optimización', 'ROI'],
+    cta: { href: '#ecosistema-intell', label: 'Ver SynecT Intell' },
   },
 ]
 
@@ -52,17 +47,17 @@ export function Solutions() {
             Soluciones
           </p>
           <h2 className="mt-3 text-4xl font-bold sm:text-5xl">
-            Industria y flotas.
+            Capacidades industriales
             <br />
-            <span className="text-neutral-500">Un ecosistema.</span>
+            <span className="text-neutral-500">sobre el stack SynecT.</span>
           </h2>
           <p className="mt-4 text-neutral-400">
-            Desde monitoreo en planta hasta control de flotas — cada vertical corre sobre la
-            infraestructura VISION.
+            Las tres etapas de la ruta VISION — más integración de PLCs,
+            telemetría industrial y soluciones a medida sobre el stack SynecT.
           </p>
         </motion.div>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-2">
+        <div className="mt-16 grid gap-6 md:grid-cols-3">
           {solutions.map((solution, i) => (
             <motion.article
               key={solution.title}
@@ -95,6 +90,19 @@ export function Solutions() {
                   </span>
                 ))}
               </div>
+
+              <a
+                href={solution.cta.href}
+                onClick={
+                  solution.cta.href === '#contacto'
+                    ? () => sessionStorage.setItem('synect-demo-product', 'integracion')
+                    : undefined
+                }
+                className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-synect-orange transition-colors hover:text-synect-orange-light"
+              >
+                {solution.cta.label}
+                <ArrowRight size={14} />
+              </a>
 
               <div className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-synect-orange to-transparent transition-all duration-500 group-hover:w-full" />
             </motion.article>

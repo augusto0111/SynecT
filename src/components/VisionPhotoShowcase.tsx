@@ -1,4 +1,4 @@
-import synectVision from '../assets/products/synect-vision-seamless.png'
+import synectVision from '../assets/products/synect-vision-render.png'
 import { DevicePhotoShowcase } from './DevicePhotoShowcase'
 
 export function VisionPhotoShowcase() {
@@ -8,7 +8,7 @@ export function VisionPhotoShowcase() {
       alt="SynecT Vision — pantalla industrial de monitoreo en tiempo real"
       label="SynecT Vision"
       sublabel="Monitoreo en vivo"
-      variant="soft"
+      variant="integrated"
     />
   )
 }

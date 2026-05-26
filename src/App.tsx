@@ -1,8 +1,8 @@
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
+import { SocialProof } from './components/SocialProof'
 import { ImpactBand } from './components/ImpactBand'
-import { VisionEcosystem } from './components/VisionEcosystem'
-import { ProductShowcase } from './components/ProductShowcase'
+import { SynectEcosystem } from './components/SynectEcosystem'
 import { Solutions } from './components/Solutions'
 import { TrustSection } from './components/TrustSection'
 import { About } from './components/About'
@@ -12,12 +12,15 @@ import { Footer } from './components/Footer'
 function App() {
   return (
     <>
+      <a href="#contenido-principal" className="skip-link">
+        Ir al contenido principal
+      </a>
       <Navbar />
-      <main className="pb-16 lg:pb-0">
+      <main id="contenido-principal" className="pb-16 lg:pb-0">
         <Hero />
+        <SocialProof />
         <ImpactBand />
-        <VisionEcosystem />
-        <ProductShowcase />
+        <SynectEcosystem />
         <Solutions />
         <TrustSection />
         <About />

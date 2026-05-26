@@ -29,6 +29,35 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 9999px;
+  background: var(--color-synect-orange);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #000;
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(255, 107, 0, 0.55);
+  outline-offset: 2px;
+}
+
 ::selection {
   background: rgba(255, 107, 0, 0.35);
   color: #fff;

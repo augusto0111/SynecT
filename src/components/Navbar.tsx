@@ -4,8 +4,8 @@ import { Menu, X } from 'lucide-react'
 import { useActiveSection } from '../hooks/useActiveSection'
 
 const links = [
-  { href: '#vision', id: 'vision', label: 'Ecosistema' },
-  { href: '#productos', id: 'productos', label: 'Productos' },
+  { href: '#ecosistema-vision', id: 'ecosistema', label: 'VISION' },
+  { href: '#orion', id: 'ecosistema', label: 'ORION' },
   { href: '#soluciones', id: 'soluciones', label: 'Soluciones' },
   { href: '#confianza', id: 'confianza', label: 'Confianza' },
   { href: '#nosotros', id: 'nosotros', label: 'Nosotros' },
@@ -55,7 +55,7 @@ export function Navbar() {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className={`text-sm transition-colors ${
+                  className={`rounded-md px-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 ${
                     activeSection === link.id
                       ? 'text-white'
                       : 'text-neutral-400 hover:text-white'

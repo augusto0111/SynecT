@@ -1,7 +1,7 @@
 const footerLinks = {
   producto: [
-    { href: '#vision', label: 'Ecosistema VISION' },
-    { href: '#productos', label: 'Productos' },
+    { href: '#ecosistema-vision', label: 'VISION' },
+    { href: '#orion', label: 'ORION Fleet' },
     { href: '#soluciones', label: 'Soluciones' },
   ],
   empresa: [
@@ -21,8 +21,9 @@ export function Footer() {
               Synec<span className="text-synect-orange">T</span>
             </span>
             <p className="mt-3 max-w-xs text-sm text-neutral-500">
-              Plataforma de Inteligencia Industrial y Telemetría. Hardware, software e IA
-              predictiva en un solo ecosistema.
+              De la medición al liderazgo con IA. VISION — Vision, Connect, Insight e
+              Intell — es nuestro producto más desarrollado; SynecT es la plataforma que
+              crece con cada vertical.
             </p>
             <a
               href="mailto:contacto@synect.io"

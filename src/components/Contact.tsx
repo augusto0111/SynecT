@@ -1,12 +1,40 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Mail, MapPin, CheckCircle2 } from 'lucide-react'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
+const PRODUCT_OPTIONS = [
+  { value: 'vision', label: 'VISION — De la medición a la predicción' },
+  { value: 'orion', label: 'ORION — Control de flotas' },
+  { value: 'integracion', label: 'Integración PLCs / telemetría' },
+  { value: 'otro', label: 'Otro / A medida' },
+] as const
+
+const PRODUCT_LABELS: Record<string, string> = {
+  vision: 'VISION',
+  orion: 'ORION',
+  integracion: 'Integración PLCs',
+  otro: 'Solución a medida',
+}
+
+function initialProduct(): string {
+  const stored = sessionStorage.getItem('synect-demo-product')
+  if (stored && stored in PRODUCT_LABELS) return stored
+  const hash = window.location.hash.replace('#', '').toLowerCase()
+  if (hash === 'orion') return 'orion'
+  if (hash.startsWith('ecosistema') || hash === 'vision') return 'vision'
+  return 'vision'
+}
+
 export function Contact() {
   const [formState, setFormState] = useState<FormState>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [producto, setProducto] = useState('vision')
+
+  useEffect(() => {
+    setProducto(initialProduct())
+  }, [])
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -16,6 +44,7 @@ export function Contact() {
     const nombre = (data.get('nombre') as string).trim()
     const email = (data.get('email') as string).trim()
     const empresa = (data.get('empresa') as string).trim()
+    const productoVal = (data.get('producto') as string).trim()
     const mensaje = (data.get('mensaje') as string).trim()
 
     const newErrors: Record<string, string> = {}
@@ -23,6 +52,7 @@ export function Contact() {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
       newErrors.email = 'Ingresá un email válido'
     if (!empresa) newErrors.empresa = 'Ingresá tu empresa o industria'
+    if (!productoVal) newErrors.producto = 'Seleccioná un producto o área'
     if (!mensaje) newErrors.mensaje = 'Contanos sobre tu operación'
 
     if (Object.keys(newErrors).length > 0) {
@@ -33,16 +63,19 @@ export function Contact() {
     setErrors({})
     setFormState('submitting')
 
-    const subject = encodeURIComponent(`Demo SynecT — ${empresa}`)
+    const productoLabel = PRODUCT_LABELS[productoVal] ?? productoVal
+    const subject = encodeURIComponent(`Demo SynecT — ${productoLabel} — ${empresa}`)
     const body = encodeURIComponent(
-      `Nombre: ${nombre}\nEmail: ${email}\nEmpresa: ${empresa}\n\n${mensaje}`
+      `Nombre: ${nombre}\nEmail: ${email}\nEmpresa: ${empresa}\nInterés: ${productoLabel}\n\n${mensaje}`
     )
 
     window.location.href = `mailto:contacto@synect.io?subject=${subject}&body=${body}`
+    sessionStorage.removeItem('synect-demo-product')
 
     setTimeout(() => {
       setFormState('success')
       form.reset()
+      setProducto('vision')
     }, 600)
   }
 
@@ -69,9 +102,8 @@ export function Contact() {
                 <span className="text-gradient-orange">tu industria?</span>
               </h2>
               <p className="mt-4 max-w-md text-neutral-400">
-                Agenda una demo personalizada y descubre cómo SynecT puede transformar la
-                operación de tu planta con telemetría, IA predictiva y dashboards de alto
-                impacto.
+                Contanos tu operación y te preparamos una demo según tu contexto — planta,
+                flota o integración con PLCs existentes.
               </p>
 
               <div className="mt-8 space-y-3">
@@ -124,7 +156,7 @@ export function Contact() {
                       name="nombre"
                       type="text"
                       autoComplete="name"
-                      className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus:border-synect-orange/40"
+                      className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
                       placeholder="Tu nombre"
                       aria-invalid={!!errors.nombre}
                       aria-describedby={errors.nombre ? 'nombre-error' : undefined}
@@ -144,7 +176,7 @@ export function Contact() {
                       name="email"
                       type="email"
                       autoComplete="email"
-                      className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus:border-synect-orange/40"
+                      className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
                       placeholder="tu@empresa.com"
                       aria-invalid={!!errors.email}
                       aria-describedby={errors.email ? 'email-error' : undefined}
@@ -164,7 +196,7 @@ export function Contact() {
                     id="empresa"
                     name="empresa"
                     type="text"
-                    className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus:border-synect-orange/40"
+                    className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
                     placeholder="Nombre de empresa o sector"
                     aria-invalid={!!errors.empresa}
                     aria-describedby={errors.empresa ? 'empresa-error' : undefined}
@@ -176,15 +208,40 @@ export function Contact() {
                   )}
                 </div>
                 <div>
+                  <label htmlFor="producto" className="mb-1.5 block text-xs text-neutral-500">
+                    ¿Qué te interesa?
+                  </label>
+                  <select
+                    id="producto"
+                    name="producto"
+                    value={producto}
+                    onChange={(e) => setProducto(e.target.value)}
+                    className="glass w-full rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
+                    aria-invalid={!!errors.producto}
+                    aria-describedby={errors.producto ? 'producto-error' : undefined}
+                  >
+                    {PRODUCT_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value} className="bg-synect-dark">
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.producto && (
+                    <p id="producto-error" className="mt-1 text-xs text-red-400">
+                      {errors.producto}
+                    </p>
+                  )}
+                </div>
+                <div>
                   <label htmlFor="mensaje" className="mb-1.5 block text-xs text-neutral-500">
                     Mensaje
                   </label>
                   <textarea
                     id="mensaje"
                     name="mensaje"
-                    placeholder="Cuéntanos sobre tu operación..."
+                    placeholder="Contanos sobre tu operación, sensores o flota..."
                     rows={4}
-                    className="glass w-full resize-none rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus:border-synect-orange/40"
+                    className="glass w-full resize-none rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
                     aria-invalid={!!errors.mensaje}
                     aria-describedby={errors.mensaje ? 'mensaje-error' : undefined}
                   />
@@ -197,7 +254,7 @@ export function Contact() {
                 <button
                   type="submit"
                   disabled={formState === 'submitting'}
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-synect-orange py-3.5 text-sm font-semibold text-black transition-all hover:bg-synect-orange-light hover:shadow-[0_0_40px_rgba(255,107,0,0.3)] disabled:opacity-60"
+                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-synect-orange py-3.5 text-sm font-semibold text-black transition-all hover:bg-synect-orange-light hover:shadow-[0_0_40px_rgba(255,107,0,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 disabled:opacity-60"
                 >
                   {formState === 'submitting' ? 'Preparando...' : 'Solicitar demo'}
                   <ArrowRight

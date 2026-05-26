@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 const words = [
@@ -12,14 +13,23 @@ const words = [
 ]
 
 export function ImpactBand() {
+  const [paused, setPaused] = useState(false)
+
   return (
-    <div className="section-seamless relative overflow-hidden py-4">
+    <div
+      className="section-seamless relative overflow-hidden py-4"
+      aria-hidden="true"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
+    >
       <div className="absolute inset-0 bg-gradient-to-r from-synect-orange/8 via-transparent to-synect-orange/8" />
       <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
       <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10" />
 
       <motion.div
-        animate={{ x: ['0%', '-50%'] }}
+        animate={paused ? undefined : { x: ['0%', '-50%'] }}
         transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
         className="flex w-max gap-12 whitespace-nowrap"
       >

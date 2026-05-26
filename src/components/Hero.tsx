@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Play } from 'lucide-react'
+import { ArrowRight, Layers } from 'lucide-react'
 import { HeroDataCore } from './HeroDataCore'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
@@ -10,6 +10,9 @@ function ParticleField() {
 
   useEffect(() => {
     if (reducedMotion) return
+
+    const desktop = window.matchMedia('(min-width: 1024px)')
+    if (!desktop.matches) return
 
     const canvas = canvasRef.current
     if (!canvas) return
@@ -131,7 +134,7 @@ export function Hero() {
             >
               <span className="h-1.5 w-1.5 rounded-full bg-synect-orange animate-pulse-glow" />
               <span className="font-mono text-xs text-synect-orange">
-                ECOSISTEMA VISION
+                SynecT · Inteligencia industrial
               </span>
             </motion.div>
 
@@ -151,12 +154,23 @@ export function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 max-w-lg text-lg leading-relaxed text-neutral-400"
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="mt-5 max-w-xl text-lg font-medium leading-snug text-neutral-200"
             >
-              Diseñamos hardware, software y agente de IA como un solo ecosistema.
-              Del sensor en planta al histórico en la nube — inteligencia industrial
-              que escala con tu operación.
+              Transformamos operaciones físicas en inteligencia digital — de la medición
+              en planta a la predicción con IA, en etapas que podés adoptar según tu
+              madurez.
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-3 max-w-lg text-sm leading-relaxed text-neutral-500"
+            >
+              VISION reúne SynecT Vision, Connect, Insight e Intell en una ruta
+              progresiva — nuestro producto más desarrollado. ORION extiende el stack a
+              flotas y campo.
             </motion.p>
 
             <motion.div
@@ -176,11 +190,11 @@ export function Hero() {
                 />
               </a>
               <a
-                href="#productos"
-                className="glass inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium text-neutral-300 transition-all hover:border-white/20 hover:text-white"
+                href="#ecosistema-vision"
+                className="glass inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium text-neutral-300 transition-all hover:border-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50"
               >
-                <Play size={14} className="text-synect-orange" />
-                Ver productos
+                <Layers size={14} className="text-synect-orange" />
+                Ver VISION y ORION
               </a>
             </motion.div>
 
@@ -191,9 +205,9 @@ export function Hero() {
               className="mt-14 flex gap-10 border-t border-white/5 pt-8"
             >
               {[
-                { value: 'VISION', label: 'Ecosistema principal' },
-                { value: 'Live', label: 'Sensores en tiempo real' },
-                { value: 'IA', label: 'Agente predictivo' },
+                { value: 'HW+SW+IA', label: 'Stack integrado propio' },
+                { value: '24/7', label: 'Monitoreo continuo' },
+                { value: 'Planta', label: 'Diseñado para operación real' },
               ].map((stat) => (
                 <div key={stat.label}>
                   <p className="text-2xl font-bold text-synect-orange">{stat.value}</p>

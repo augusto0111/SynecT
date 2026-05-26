@@ -5,7 +5,7 @@ const highlights = [
   {
     icon: Factory,
     title: 'Experiencia real en planta',
-    text: 'Nacida de la gestión directa de fábricas y líneas de producción. Conocemos la industria porque venimos de ella.',
+    text: 'Fundada por quienes gestionan planta y producción — entendemos tiempos de parada, riesgo operativo y presión de KPIs.',
   },
   {
     icon: Layers,
@@ -40,11 +40,10 @@ export function About() {
               <span className="text-neutral-500">con raíces industriales</span>
             </h2>
             <p className="mt-6 text-neutral-400 leading-relaxed">
-              SynecT es una empresa de base tecnológica e ingeniería enfocada en la
-              transformación digital de la industria. Combinamos el conocimiento de la
-              industria tradicional con ingeniería moderna — sensores, SynecT Vision en
-              planta, Plataforma VISION con históricos y agente de IA para decisiones
-              gerenciales.
+              SynecT transforma datos físicos en inteligencia accionable — desde la
+              captura en campo hasta modelos de IA que optimizan el negocio. VISION
+              articula esa ruta en tres etapas: Vision, Connect + Insight e Intell.
+              ORION extiende el stack a flotas y operación en campo.
             </p>
           </motion.div>
 

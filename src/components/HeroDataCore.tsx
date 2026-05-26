@@ -3,9 +3,9 @@ import { motion } from 'framer-motion'
 const nodes = [
   { label: 'Sensores', x: 18, y: 28 },
   { label: 'PLCs', x: 82, y: 22 },
-  { label: 'SynecT Vision', x: 50, y: 48, primary: true },
-  { label: 'Plataforma', x: 22, y: 72 },
-  { label: 'Agente IA', x: 78, y: 76 },
+  { label: 'SynecT', x: 50, y: 48, primary: true },
+  { label: 'VISION', x: 22, y: 72, product: true },
+  { label: 'ORION', x: 78, y: 76, product: true },
 ]
 
 const links = [
@@ -72,16 +72,20 @@ export function HeroDataCore() {
           >
             {node.primary ? (
               <div className="text-center">
-                <p className="font-mono text-[8px] uppercase tracking-widest text-synect-orange">
-                  SynecT
+                <p className="text-sm font-bold text-white">SynecT</p>
+                <p className="font-mono text-[7px] uppercase tracking-widest text-synect-orange">
+                  Plataforma
                 </p>
-                <p className="text-xs font-bold text-white">VISION</p>
               </div>
+            ) : 'product' in node && node.product ? (
+              <p className="font-mono text-[8px] uppercase tracking-wider text-synect-orange">
+                {node.label}
+              </p>
             ) : (
               <span className="h-2 w-2 rounded-full bg-synect-orange animate-pulse-glow" />
             )}
           </div>
-          {!node.primary && (
+          {!node.primary && !('product' in node && node.product) && (
             <p className="mt-1.5 whitespace-nowrap text-center font-mono text-[9px] text-neutral-500">
               {node.label}
             </p>
