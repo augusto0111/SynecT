@@ -22,8 +22,7 @@ import {
 import { VisionPhotoShowcase } from './VisionPhotoShowcase'
 import { PlatformVisual } from './visuals/PlatformVisual'
 import { AgentVisual } from './visuals/AgentVisual'
-import { OrionSectionBg } from './visuals/OrionSectionBg'
-import { OrionPhotoShowcase } from './OrionPhotoShowcase'
+import { OrionVideoShowcase } from './OrionVideoShowcase'
 import { EcosystemCta } from './EcosystemCta'
 import {
   hashForVisionStage,
@@ -546,12 +545,8 @@ export function SynectEcosystem() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.35 }}
-                className="relative min-h-[520px]"
               >
-                <OrionSectionBg />
-
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between border-b border-white/10 bg-black/20 px-6 py-5 backdrop-blur-sm sm:px-10">
+                  <div className="flex items-center justify-between border-b border-white/5 px-6 py-5 sm:px-10">
                     <div>
                       <p className="font-mono text-[10px] uppercase tracking-widest text-neutral-400">
                         Ecosistema ORION
@@ -564,11 +559,11 @@ export function SynectEcosystem() {
                     <span className="font-mono text-[10px] text-synect-orange">FLOTA + CAMPO</span>
                   </div>
 
-                  <p className="border-b border-white/10 bg-black/15 px-6 py-4 text-sm text-neutral-300 backdrop-blur-sm sm:px-10">
+                  <p className="border-b border-white/5 px-6 py-4 text-sm text-neutral-400 sm:px-10">
                     {currentProduct.description}
                   </p>
 
-                  <div className="bg-black/20 backdrop-blur-sm">
+                  <div>
                     <FlowStrip
                       steps={orionFlow}
                       columns={4}
@@ -611,13 +606,12 @@ export function SynectEcosystem() {
                       </div>
 
                       <div className="relative order-1 flex items-center justify-center lg:order-2">
-                        <OrionPhotoShowcase />
+                        <OrionVideoShowcase />
                       </div>
                     </div>
                   </div>
 
-                  <EcosystemCta product="orion" />
-                </div>
+                <EcosystemCta product="orion" />
               </motion.div>
             )}
           </AnimatePresence>
