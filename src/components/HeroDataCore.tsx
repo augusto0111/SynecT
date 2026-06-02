@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion'
 
 const nodes = [
-  { label: 'Sensores', x: 18, y: 28 },
-  { label: 'PLCs', x: 82, y: 22 },
-  { label: 'SynecT', x: 50, y: 48, primary: true },
-  { label: 'VISION', x: 22, y: 72, product: true },
-  { label: 'ORION', x: 78, y: 76, product: true },
+  { id: 'field-a', label: 'FIELD', sub: 'HW', x: 18, y: 28 },
+  { id: 'field-b', label: 'EDGE', sub: 'HW', x: 82, y: 22 },
+  { id: 'core', label: 'SynecT', sub: 'PLATFORM', x: 50, y: 48, primary: true },
+  { id: 'vision', label: 'VISION', sub: 'SW+IA', x: 22, y: 72, product: true },
+  { id: 'orion', label: 'ORION', sub: 'SW+IA', x: 78, y: 76, product: true },
 ]
 
 const links = [
@@ -14,26 +14,15 @@ const links = [
 
 export function HeroDataCore() {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-lg">
-      <div className="absolute inset-0 rounded-full bg-synect-orange/10 blur-[100px]" />
-      <motion.div
-        animate={{ scale: [1, 1.08, 1], opacity: [0.4, 0.7, 0.4] }}
-        transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-        className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-synect-orange/20 blur-[60px]"
-      />
+    <div className="tech-panel scanline relative mx-auto aspect-square w-full max-w-lg p-4">
+      <div className="absolute inset-0 grid-bg opacity-40" aria-hidden="true" />
+      <div className="absolute inset-0 bg-gradient-to-br from-synect-orange/[0.06] via-transparent to-transparent" />
 
-      {/* Orbital rings */}
-      {[100, 78, 56].map((size, i) => (
-        <motion.div
-          key={size}
-          className="absolute left-1/2 top-1/2 rounded-full border border-synect-orange/15"
-          style={{ width: `${size}%`, height: `${size}%`, x: '-50%', y: '-50%' }}
-          animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
-          transition={{ duration: 40 + i * 15, repeat: Infinity, ease: 'linear' }}
-        />
-      ))}
+      <p className="absolute left-4 top-3 font-mono text-[9px] uppercase tracking-widest text-neutral-600">
+        // ARCH · HW → SW → IA
+      </p>
 
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" aria-hidden="true">
+      <svg className="absolute inset-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)]" viewBox="0 0 100 100" aria-hidden="true">
         {links.map(([a, b], i) => {
           const n1 = nodes[a]
           const n2 = nodes[b]
@@ -44,8 +33,9 @@ export function HeroDataCore() {
               y1={n1.y}
               x2={n2.x}
               y2={n2.y}
-              stroke="rgba(255,107,0,0.25)"
-              strokeWidth="0.3"
+              stroke="rgba(255,107,0,0.3)"
+              strokeWidth="0.35"
+              strokeDasharray="1 1"
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
               transition={{ delay: 0.5 + i * 0.15, duration: 0.8 }}
@@ -56,7 +46,7 @@ export function HeroDataCore() {
 
       {nodes.map((node, i) => (
         <motion.div
-          key={node.label}
+          key={node.id}
           className="absolute -translate-x-1/2 -translate-y-1/2"
           style={{ left: `${node.x}%`, top: `${node.y}%` }}
           initial={{ opacity: 0, scale: 0 }}
@@ -64,43 +54,47 @@ export function HeroDataCore() {
           transition={{ delay: 0.3 + i * 0.1, type: 'spring' }}
         >
           <div
-            className={`relative flex items-center justify-center rounded-full ${
+            className={`relative flex flex-col items-center justify-center ${
               node.primary
-                ? 'h-20 w-20 glass-orange glow-orange'
-                : 'h-11 w-11 glass'
+                ? 'tech-panel-orange h-[4.5rem] w-[4.5rem] glow-orange'
+                : 'product' in node && node.product
+                  ? 'tech-panel h-12 w-[4.25rem]'
+                  : 'tech-panel h-10 w-10'
             }`}
           >
             {node.primary ? (
-              <div className="text-center">
-                <p className="text-sm font-bold text-white">SynecT</p>
+              <>
+                <p className="text-xs font-bold text-white">{node.label}</p>
                 <p className="font-mono text-[7px] uppercase tracking-widest text-synect-orange">
-                  Plataforma
+                  {node.sub}
                 </p>
-              </div>
+              </>
             ) : 'product' in node && node.product ? (
-              <p className="font-mono text-[8px] uppercase tracking-wider text-synect-orange">
-                {node.label}
-              </p>
+              <>
+                <p className="font-mono text-[8px] font-semibold uppercase tracking-wider text-synect-orange">
+                  {node.label}
+                </p>
+                <p className="font-mono text-[6px] text-neutral-500">{node.sub}</p>
+              </>
             ) : (
-              <span className="h-2 w-2 rounded-full bg-synect-orange animate-pulse-glow" />
+              <span className="h-2 w-2 bg-synect-orange animate-pulse-glow" />
             )}
           </div>
           {!node.primary && !('product' in node && node.product) && (
-            <p className="mt-1.5 whitespace-nowrap text-center font-mono text-[9px] text-neutral-500">
+            <p className="mt-1.5 whitespace-nowrap text-center font-mono text-[8px] uppercase tracking-wider text-neutral-500">
               {node.label}
             </p>
           )}
         </motion.div>
       ))}
 
-      {/* Live metrics */}
-      <div className="absolute bottom-0 left-0 glass rounded-xl px-4 py-3 font-mono text-[10px]">
-        <span className="text-neutral-500">TELEMETRÍA</span>
-        <span className="ml-2 text-synect-orange">EN VIVO</span>
+      <div className="absolute bottom-3 left-3 tech-panel px-3 py-2 font-mono text-[9px]">
+        <span className="text-neutral-500">[TELEM]</span>
+        <span className="ml-1.5 text-synect-orange">STREAM · LIVE</span>
       </div>
-      <div className="absolute right-0 top-0 glass-orange rounded-xl px-4 py-3 font-mono text-[10px]">
-        <span className="text-synect-orange">IA</span>
-        <span className="ml-2 text-white">ACTIVA</span>
+      <div className="absolute right-3 top-10 tech-panel-orange px-3 py-2 font-mono text-[9px]">
+        <span className="text-synect-orange">[IA]</span>
+        <span className="ml-1.5 text-white">INFERENCE · ON</span>
       </div>
     </div>
   )

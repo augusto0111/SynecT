@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Layers } from 'lucide-react'
-import { HeroDataCore } from './HeroDataCore'
+import { ArrowRight } from 'lucide-react'
+import { TechDemoPanelStack } from './tech/TechDemoPanelStack'
+import { stackDemoPanels } from '../lib/tech/stackDemoPanels'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 function ParticleField() {
@@ -109,7 +110,9 @@ function ParticleField() {
 }
 
 function HeroVisual() {
-  return <HeroDataCore />
+  return (
+    <TechDemoPanelStack panels={stackDemoPanels.slice(0, 3)} className="tech-demo-stack" />
+  )
 }
 
 export function Hero() {
@@ -130,11 +133,14 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="glass-orange mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5"
+              className="mb-5 flex flex-wrap items-center gap-2"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-synect-orange animate-pulse-glow" />
-              <span className="font-mono text-xs text-synect-orange">
-                SynecT · Inteligencia industrial
+              <span className="tech-badge">
+                <span className="h-1.5 w-1.5 bg-synect-orange animate-pulse-glow" />
+                SYNECT · INDUSTRIAL IA
+              </span>
+              <span className="tech-stack-tag">
+                <em>HW</em> · SW · IA
               </span>
             </motion.div>
 
@@ -142,13 +148,11 @@ export function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-[5.5rem]"
+              className="text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.75rem]"
             >
-              Del mundo{' '}
-              <span className="text-gradient glow-text">físico</span>
+              Inteligencia industrial
               <br />
-              al{' '}
-              <span className="text-gradient-orange glow-text">digital</span>
+              <span className="text-gradient-orange glow-text">con stack propio</span>
             </motion.h1>
 
             <motion.p
@@ -157,9 +161,8 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="mt-5 max-w-xl text-lg font-medium leading-snug text-neutral-200"
             >
-              Transformamos operaciones físicas en inteligencia digital — de la medición
-              en planta a la predicción con IA, en etapas que podés adoptar según tu
-              madurez.
+              Sensores, pantallas en planta, plataforma de datos e IA predictiva — diseñados
+              juntos para operaciones en fábrica y en ruta.
             </motion.p>
 
             <motion.p
@@ -168,9 +171,9 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-3 max-w-lg text-sm leading-relaxed text-neutral-500"
             >
-              VISION reúne SynecT Vision, Connect, Insight e Intell en una ruta
-              progresiva — nuestro producto más desarrollado. ORION extiende el stack a
-              flotas y campo.
+              <span className="text-neutral-400">SynecT</span> es la plataforma ·{' '}
+              <span className="text-neutral-400">VISION</span> para planta ·{' '}
+              <span className="text-neutral-400">ORION</span> para flota
             </motion.p>
 
             <motion.div
@@ -179,22 +182,15 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-10 flex flex-wrap gap-4"
             >
-              <a
-                href="#contacto"
-                className="group inline-flex items-center gap-2 rounded-full bg-synect-orange px-7 py-3.5 text-sm font-semibold text-black transition-all hover:bg-synect-orange-light hover:shadow-[0_0_40px_rgba(255,107,0,0.4)]"
-              >
+              <a href="#contacto" className="tech-btn-primary group">
                 Solicitar demo
                 <ArrowRight
-                  size={16}
+                  size={14}
                   className="transition-transform group-hover:translate-x-1"
                 />
               </a>
-              <a
-                href="#ecosistema-vision"
-                className="glass inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium text-neutral-300 transition-all hover:border-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50"
-              >
-                <Layers size={14} className="text-synect-orange" />
-                Ver VISION y ORION
+              <a href="#ecosistema" className="tech-btn-ghost">
+                Ver productos
               </a>
             </motion.div>
 
@@ -202,16 +198,16 @@ export function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="mt-14 flex gap-10 border-t border-white/5 pt-8"
+              className="mt-14 grid grid-cols-3 gap-4 border-t border-white/[0.06] pt-8"
             >
               {[
-                { value: 'HW+SW+IA', label: 'Stack integrado propio' },
-                { value: '24/7', label: 'Monitoreo continuo' },
-                { value: 'Planta', label: 'Diseñado para operación real' },
+                { value: 'HW+SW+IA', label: 'Stack integrado' },
+                { value: '24/7', label: 'Monitoreo' },
+                { value: 'EDGE', label: 'Planta + flota' },
               ].map((stat) => (
-                <div key={stat.label}>
-                  <p className="text-2xl font-bold text-synect-orange">{stat.value}</p>
-                  <p className="mt-1 text-xs text-neutral-500">{stat.label}</p>
+                <div key={stat.label} className="tech-panel px-3 py-3">
+                  <p className="tech-stat-value">{stat.value}</p>
+                  <p className="tech-stat-label">{stat.label}</p>
                 </div>
               ))}
             </motion.div>
@@ -234,8 +230,8 @@ export function Hero() {
           transition={{ repeat: Infinity, duration: 2 }}
           className="flex flex-col items-center gap-2"
         >
-          <span className="font-mono text-[10px] uppercase tracking-widest text-neutral-600">
-            Desplazar
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-neutral-600">
+            scroll ↓
           </span>
           <div className="h-8 w-px bg-gradient-to-b from-synect-orange/50 to-transparent" />
         </motion.div>

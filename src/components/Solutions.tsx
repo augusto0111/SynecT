@@ -52,8 +52,7 @@ export function Solutions() {
             <span className="text-neutral-500">sobre el stack SynecT.</span>
           </h2>
           <p className="mt-4 text-neutral-400">
-            Las tres etapas de la ruta VISION — más integración de PLCs,
-            telemetría industrial y soluciones a medida sobre el stack SynecT.
+            Las tres etapas de la ruta VISION — y soluciones a medida sobre el stack SynecT.
           </p>
         </motion.div>
 

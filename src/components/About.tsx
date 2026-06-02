@@ -31,19 +31,16 @@ export function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="font-mono text-xs uppercase tracking-widest text-synect-orange">
-              Quiénes Somos
-            </p>
-            <h2 className="mt-3 text-4xl font-bold sm:text-5xl leading-tight">
+            <p className="tech-eyebrow">EQUIPO // NOSOTROS</p>
+            <h2 className="tech-title mt-3">
               Transformación digital
               <br />
               <span className="text-neutral-500">con raíces industriales</span>
             </h2>
             <p className="mt-6 text-neutral-400 leading-relaxed">
-              SynecT transforma datos físicos en inteligencia accionable — desde la
-              captura en campo hasta modelos de IA que optimizan el negocio. VISION
-              articula esa ruta en tres etapas: Vision, Connect + Insight e Intell.
-              ORION extiende el stack a flotas y operación en campo.
+              SynecT nace de la gestión directa de fábricas y líneas de producción.
+              Construimos la plataforma que necesitábamos operar — y la llevamos a otras
+              industrias con el mismo rigor técnico y operativo.
             </p>
           </motion.div>
 

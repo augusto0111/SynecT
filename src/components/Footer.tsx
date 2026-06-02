@@ -1,8 +1,7 @@
 const footerLinks = {
   producto: [
-    { href: '#ecosistema-vision', label: 'VISION' },
-    { href: '#orion', label: 'ORION Fleet' },
-    { href: '#soluciones', label: 'Soluciones' },
+    { href: '#ecosistema', label: 'Productos (VISION · ORION)' },
+    { href: '#beneficios', label: 'Beneficios' },
   ],
   empresa: [
     { href: '#confianza', label: 'Confianza' },
@@ -13,7 +12,7 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="section-seamless-top pb-24 pt-12 lg:pb-12">
+    <footer className="section-seamless-top border-t border-white/[0.06] bg-[#050505] pb-24 pt-12 lg:pb-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
@@ -21,9 +20,8 @@ export function Footer() {
               Synec<span className="text-synect-orange">T</span>
             </span>
             <p className="mt-3 max-w-xs text-sm text-neutral-500">
-              De la medición al liderazgo con IA. VISION — Vision, Connect, Insight e
-              Intell — es nuestro producto más desarrollado; SynecT es la plataforma que
-              crece con cada vertical.
+              Plataforma industrial con hardware, software e IA propios. VISION para
+              planta, ORION para flotas — un ecosistema, múltiples verticales.
             </p>
             <a
               href="mailto:contacto@synect.io"

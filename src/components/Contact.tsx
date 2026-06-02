@@ -7,14 +7,12 @@ type FormState = 'idle' | 'submitting' | 'success' | 'error'
 const PRODUCT_OPTIONS = [
   { value: 'vision', label: 'VISION — De la medición a la predicción' },
   { value: 'orion', label: 'ORION — Control de flotas' },
-  { value: 'integracion', label: 'Integración PLCs / telemetría' },
   { value: 'otro', label: 'Otro / A medida' },
 ] as const
 
 const PRODUCT_LABELS: Record<string, string> = {
   vision: 'VISION',
   orion: 'ORION',
-  integracion: 'Integración PLCs',
   otro: 'Solución a medida',
 }
 
@@ -93,17 +91,15 @@ export function Contact() {
 
           <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-synect-orange">
-                Contacto
-              </p>
-              <h2 className="mt-3 text-4xl font-bold sm:text-5xl">
+              <p className="tech-eyebrow">CONTACT // DEMO</p>
+              <h2 className="tech-title mt-3">
                 ¿Listo para conectar
                 <br />
                 <span className="text-gradient-orange">tu industria?</span>
               </h2>
               <p className="mt-4 max-w-md text-neutral-400">
-                Contanos tu operación y te preparamos una demo según tu contexto — planta,
-                flota o integración con PLCs existentes.
+                Contanos tu operación y te preparamos una demo según tu contexto — planta
+                o flota.
               </p>
 
               <div className="mt-8 space-y-3">

@@ -29,10 +29,8 @@ export function TrustSection() {
           viewport={{ once: true }}
           className="max-w-2xl"
         >
-          <p className="font-mono text-xs uppercase tracking-widest text-synect-orange">
-            Confianza
-          </p>
-          <h2 className="mt-3 text-4xl font-bold sm:text-5xl">
+          <p className="tech-eyebrow">CONFIANZA // OPERACIÓN REAL</p>
+          <h2 className="tech-title mt-3">
             Diseñado en planta,
             <br />
             <span className="text-neutral-500">no en un deck.</span>
@@ -51,7 +49,7 @@ export function TrustSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="rounded-2xl border border-white/8 bg-white/[0.03] p-6"
+              className="tech-panel p-6"
             >
               <pillar.icon className="text-synect-orange" size={22} />
               <h3 className="mt-4 font-bold">{pillar.title}</h3>
@@ -64,7 +62,7 @@ export function TrustSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-16 rounded-2xl border border-synect-orange/15 bg-synect-orange/[0.04] p-8 sm:p-10"
+          className="tech-panel-orange mt-16 p-8 sm:p-10"
         >
           <Quote className="text-synect-orange/60" size={28} />
           <p className="mt-4 text-lg leading-relaxed text-neutral-300 sm:text-xl">

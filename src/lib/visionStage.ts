@@ -1,5 +1,15 @@
 export type VisionStageId = 'synect-vision' | 'connect-insight' | 'synect-intell'
 
+export const visionStageOrder: VisionStageId[] = [
+  'synect-vision',
+  'connect-insight',
+  'synect-intell',
+]
+
+export function visionStageIndex(stage: VisionStageId): number {
+  return visionStageOrder.indexOf(stage)
+}
+
 const HASH_TO_STAGE: Record<string, VisionStageId> = {
   'ecosistema-vision': 'synect-vision',
   vision: 'synect-vision',

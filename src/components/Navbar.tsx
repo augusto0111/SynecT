@@ -4,11 +4,9 @@ import { Menu, X } from 'lucide-react'
 import { useActiveSection } from '../hooks/useActiveSection'
 
 const links = [
-  { href: '#ecosistema-vision', id: 'ecosistema', label: 'VISION' },
-  { href: '#orion', id: 'ecosistema', label: 'ORION' },
-  { href: '#soluciones', id: 'soluciones', label: 'Soluciones' },
-  { href: '#confianza', id: 'confianza', label: 'Confianza' },
-  { href: '#nosotros', id: 'nosotros', label: 'Nosotros' },
+  { href: '#que-es-synect', id: 'que-es-synect', label: 'SynecT' },
+  { href: '#ecosistema', id: 'ecosistema', label: 'Productos' },
+  { href: '#beneficios', id: 'beneficios', label: 'Beneficios' },
   { href: '#contacto', id: 'contacto', label: 'Contacto' },
 ]
 
@@ -39,26 +37,28 @@ export function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'glass-strong py-3' : 'py-5 bg-transparent'
+          scrolled
+            ? 'glass-strong border-b border-white/[0.06] py-2.5'
+            : 'border-b border-transparent py-4 bg-transparent'
         }`}
       >
         <nav
           className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8"
           aria-label="Navegación principal"
         >
-          <a href="#" className="text-xl font-bold tracking-tight">
+          <a href="#" className="text-lg font-bold tracking-tight">
             Synec<span className="text-synect-orange">T</span>
           </a>
 
-          <ul className="hidden items-center gap-6 lg:flex">
+          <ul className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className={`rounded-md px-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 ${
+                  className={`rounded-sm px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 ${
                     activeSection === link.id
-                      ? 'text-white'
-                      : 'text-neutral-400 hover:text-white'
+                      ? 'text-synect-orange'
+                      : 'text-neutral-500 hover:text-white'
                   }`}
                   aria-current={activeSection === link.id ? 'true' : undefined}
                 >
@@ -68,12 +68,12 @@ export function Navbar() {
             ))}
           </ul>
 
-          <div className="hidden lg:block">
-            <a
-              href="#contacto"
-              className="glass-orange inline-flex items-center rounded-full px-5 py-2.5 text-sm font-medium text-synect-orange transition-all hover:bg-synect-orange/15 hover:shadow-[0_0_30px_rgba(255,107,0,0.2)]"
-            >
-              Solicitar demo
+          <div className="hidden items-center gap-3 lg:flex">
+            <span className="tech-stack-tag hidden xl:inline">
+              <em>HW</em> · SW · IA
+            </span>
+            <a href="#contacto" className="tech-btn-primary !py-2 !px-4 !text-[11px]">
+              Demo
             </a>
           </div>
 
@@ -88,6 +88,17 @@ export function Navbar() {
           </button>
         </nav>
 
+        {scrolled && (
+          <div
+            className="mx-auto hidden max-w-7xl border-t border-white/[0.04] px-6 py-1.5 lg:block lg:px-8"
+            aria-hidden="true"
+          >
+            <p className="font-mono text-[9px] uppercase tracking-widest text-neutral-600">
+              STACK :: hardware en campo · software operativo · IA predictiva · planta + flota
+            </p>
+          </div>
+        )}
+
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
@@ -101,8 +112,8 @@ export function Navbar() {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className={`block ${
-                        activeSection === link.id ? 'text-white' : 'text-neutral-300'
+                      className={`block font-mono text-sm uppercase tracking-wider ${
+                        activeSection === link.id ? 'text-synect-orange' : 'text-neutral-300'
                       }`}
                       onClick={() => setMobileOpen(false)}
                     >
@@ -113,7 +124,7 @@ export function Navbar() {
                 <li>
                   <a
                     href="#contacto"
-                    className="glass-orange block rounded-full px-5 py-2.5 text-center text-sm font-medium text-synect-orange"
+                    className="tech-btn-primary block text-center"
                     onClick={() => setMobileOpen(false)}
                   >
                     Solicitar demo
@@ -126,12 +137,12 @@ export function Navbar() {
       </motion.header>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#0a0a0a]/95 p-3 backdrop-blur-lg lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#050505]/95 p-3 backdrop-blur-lg lg:hidden"
         aria-hidden={false}
       >
         <a
           href="#contacto"
-          className="flex w-full items-center justify-center rounded-full bg-synect-orange py-3 text-sm font-semibold text-black"
+          className="tech-btn-primary flex w-full items-center justify-center !py-3"
         >
           Solicitar demo
         </a>
