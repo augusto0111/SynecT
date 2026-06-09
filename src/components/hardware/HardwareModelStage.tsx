@@ -197,30 +197,18 @@ export function HardwareModelStage({
   const shellRef = useRef<HTMLDivElement>(null)
   const inView = useInView(containerRef)
   const [mounted, setMounted] = useState(false)
-  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     if (inView) setMounted(true)
   }, [inView])
 
-  useEffect(() => {
-    if (!inView) setReady(false)
-  }, [inView, modelUrl])
-
   const handleReady = useCallback(() => {
-    setReady(true)
     dispatchLayoutSync()
   }, [])
 
   return (
     <div ref={containerRef} className="hardware-model-stage">
       <div className="hardware-model-stage-inner">
-        {mounted && !ready && (
-          <p className="hardware-model-loading font-mono text-[10px] text-neutral-600">
-            Cargando modelo…
-          </p>
-        )}
-
         {mounted && (
           <div ref={shellRef} className="hardware-model-canvas-shell">
             <Canvas
