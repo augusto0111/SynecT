@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="SynecT" pages="5">
   <diagram id="flujo-general" name="1. Flujo general">
-    <mxGraphModel dx="2247" dy="2001" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1200" math="0" shadow="0">
+    <mxGraphModel dx="2920" dy="2401" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -134,8 +134,25 @@
         <mxCell id="OyNqrt88oGdgKEtcvEsJ-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Productos" vertex="1">
           <mxGeometry height="30" width="120" x="40" y="100" as="geometry" />
         </mxCell>
+        <mxCell id="OyNqrt88oGdgKEtcvEsJ-84" edge="1" parent="1" source="OyNqrt88oGdgKEtcvEsJ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;dashed=1;" target="eco">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-90" y="185" />
+              <mxPoint x="-90" y="580" />
+              <mxPoint x="418" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
         <mxCell id="OyNqrt88oGdgKEtcvEsJ-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Beneficios" vertex="1">
           <mxGeometry height="30" width="120" x="40" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="OyNqrt88oGdgKEtcvEsJ-85" edge="1" parent="1" source="OyNqrt88oGdgKEtcvEsJ-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" target="trust">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-30" y="245" />
+              <mxPoint x="-30" y="788" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="OyNqrt88oGdgKEtcvEsJ-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Contacto" vertex="1">
           <mxGeometry height="30" width="120" x="40" y="230" as="geometry" />
@@ -230,6 +247,16 @@
         <mxCell id="OyNqrt88oGdgKEtcvEsJ-45" connectable="0" parent="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="click" vertex="1">
           <mxGeometry x="820" y="850" as="geometry">
             <mxPoint x="-157" y="-59" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OyNqrt88oGdgKEtcvEsJ-86" connectable="0" parent="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="click" vertex="1">
+          <mxGeometry x="250" y="450" as="geometry">
+            <mxPoint x="-343" y="-61" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OyNqrt88oGdgKEtcvEsJ-87" connectable="0" parent="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="click" vertex="1">
+          <mxGeometry x="210" y="410" as="geometry">
+            <mxPoint x="-239" y="33" as="offset" />
           </mxGeometry>
         </mxCell>
       </root>

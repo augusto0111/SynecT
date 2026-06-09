@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Mail, MapPin, CheckCircle2 } from 'lucide-react'
 
@@ -16,23 +17,24 @@ const PRODUCT_LABELS: Record<string, string> = {
   otro: 'Solución a medida',
 }
 
-function initialProduct(): string {
+function initialProduct(hash: string): string {
   const stored = sessionStorage.getItem('synect-demo-product')
   if (stored && stored in PRODUCT_LABELS) return stored
-  const hash = window.location.hash.replace('#', '').toLowerCase()
-  if (hash === 'orion') return 'orion'
-  if (hash.startsWith('ecosistema') || hash === 'vision') return 'vision'
+  const h = hash.replace('#', '').toLowerCase()
+  if (h === 'orion' || h === 'orion-catalog') return 'orion'
+  if (h === 'synect' || h.startsWith('ecosistema') || h === 'vision') return 'vision'
   return 'vision'
 }
 
 export function Contact() {
+  const { hash } = useLocation()
   const [formState, setFormState] = useState<FormState>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [producto, setProducto] = useState('vision')
 
   useEffect(() => {
-    setProducto(initialProduct())
-  }, [])
+    setProducto(initialProduct(hash))
+  }, [hash])
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -78,7 +80,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contacto" className="section-seamless relative py-24">
+    <section id="contacto" className="section-seamless relative scroll-mt-20 py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -152,7 +154,7 @@ export function Contact() {
                       name="nombre"
                       type="text"
                       autoComplete="name"
-                      className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
+                      className="contact-field glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-[border-color]"
                       placeholder="Tu nombre"
                       aria-invalid={!!errors.nombre}
                       aria-describedby={errors.nombre ? 'nombre-error' : undefined}
@@ -172,7 +174,7 @@ export function Contact() {
                       name="email"
                       type="email"
                       autoComplete="email"
-                      className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
+                      className="contact-field glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-[border-color]"
                       placeholder="tu@empresa.com"
                       aria-invalid={!!errors.email}
                       aria-describedby={errors.email ? 'email-error' : undefined}
@@ -192,7 +194,7 @@ export function Contact() {
                     id="empresa"
                     name="empresa"
                     type="text"
-                    className="glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
+                    className="contact-field glass w-full rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-[border-color]"
                     placeholder="Nombre de empresa o sector"
                     aria-invalid={!!errors.empresa}
                     aria-describedby={errors.empresa ? 'empresa-error' : undefined}
@@ -212,7 +214,7 @@ export function Contact() {
                     name="producto"
                     value={producto}
                     onChange={(e) => setProducto(e.target.value)}
-                    className="glass w-full rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
+                    className="contact-field glass w-full rounded-xl px-4 py-3 text-sm text-white outline-none transition-[border-color]"
                     aria-invalid={!!errors.producto}
                     aria-describedby={errors.producto ? 'producto-error' : undefined}
                   >
@@ -237,7 +239,7 @@ export function Contact() {
                     name="mensaje"
                     placeholder="Contanos sobre tu operación, sensores o flota..."
                     rows={4}
-                    className="glass w-full resize-none rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-synect-orange/40"
+                    className="contact-field glass w-full resize-none rounded-xl px-4 py-3 text-sm text-white placeholder:text-neutral-600 outline-none transition-[border-color]"
                     aria-invalid={!!errors.mensaje}
                     aria-describedby={errors.mensaje ? 'mensaje-error' : undefined}
                   />
@@ -250,7 +252,7 @@ export function Contact() {
                 <button
                   type="submit"
                   disabled={formState === 'submitting'}
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-synect-orange py-3.5 text-sm font-semibold text-black transition-all hover:bg-synect-orange-light hover:shadow-[0_0_40px_rgba(255,107,0,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 disabled:opacity-60"
+                  className="group flex w-full items-center justify-center gap-2 rounded-sm bg-synect-orange py-3.5 text-sm font-semibold text-black transition-all hover:bg-synect-orange-light hover:shadow-[0_0_40px_rgba(255,107,0,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 disabled:opacity-60"
                 >
                   {formState === 'submitting' ? 'Preparando...' : 'Solicitar demo'}
                   <ArrowRight

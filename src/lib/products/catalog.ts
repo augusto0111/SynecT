@@ -101,7 +101,7 @@ export const productLines: ProductLine[] = [
   {
     id: 'orion',
     label: 'ORION',
-    tagline: 'Fleet Control',
+    tagline: 'Control de flotas',
     description:
       'Vertical para flotas y campo: tracking GPS, telemetría de caja negra, alertas en ruta y analítica de conducción — nativo en hardware SynecT.',
   },
@@ -162,9 +162,9 @@ export const visionStages: VisionStage[] = [
     description:
       'SynecT Vision es el punto de entrada: reemplaza medidores analógicos por pantallas industriales junto al equipo. El operador ve el activo y el dato en el mismo lugar — sin subir escaleras ni anotar en planillas.',
     features: [
-      'Pantallas ruggedizadas con UI diseñada para operadores de planta',
+      'Pantallas resistentes para planta, con interfaz clara para operadores',
       'Baja inversión inicial — el paquete más accesible del ecosistema',
-      'Alertas visuales y sonoras ante umbrales críticos en tiempo real',
+      'Alertas visuales ante umbrales críticos en tiempo real',
       'Hardware y software locales, listos para escalar a Connect e Insight',
     ],
     clientValue:
@@ -193,7 +193,7 @@ export const visionStages: VisionStage[] = [
       {
         category: 'Hardware',
         items: [
-          'Pantallas industriales ruggedizadas para piso de planta',
+          'Pantallas industriales resistentes, hechas para el piso de planta',
           'Gateway local de adquisición y edge processing',
           'Compatibilidad con sensores de nivel, presión, temperatura y flujo',
         ],
@@ -202,7 +202,7 @@ export const visionStages: VisionStage[] = [
         category: 'Software',
         items: [
           'Interfaz diseñada para operadores — curva de aprendizaje mínima',
-          'Alertas visuales, sonoras y por umbral configurable',
+          'Alertas visuales configurables por umbral',
           'Preparado para sincronizar telemetría con SynecT Connect',
         ],
       },
@@ -225,10 +225,9 @@ export const visionStages: VisionStage[] = [
     badge: 'Almacenamiento + análisis',
     title: 'Del dato confiable al conocimiento accionable',
     description:
-      'Una misma etapa de madurez con dos capacidades complementarias: SynecT Connect guarda y estandariza la telemetría en infraestructura propia; SynecT Insight la transforma en dashboards, KPIs y reportes para gerencia y ingeniería.',
+      'Una misma etapa de madurez con dos capacidades complementarias: SynecT Connect guarda y estandariza la telemetría en infraestructura propia; SynecT Insight la transforma en dashboards, KPIs y reportes para gerencia e ingeniería.',
     features: [
       'Connect: datacenter propio, soberanía de datos y retención histórica escalable',
-      'APIs y exportación para integrar con ERP, MES o sistemas corporativos',
       'Insight: dashboards por activo, línea, turno o planta completa',
       'Detección de patrones, tendencias y correlaciones invisibles en tiempo real',
     ],
@@ -358,7 +357,7 @@ export const orionStages: OrionStage[] = [
     label: 'SynecT Field Unit',
     short: 'Hardware',
     detail:
-      'Unidad ruggedizada instalada en vehículo: GPS, sensores de conducción, conectividad celular y almacenamiento local de telemetría.',
+      'Unidad resistente instalada en el vehículo: GPS, sensores de conducción, conectividad celular y almacenamiento local de telemetría.',
   },
   {
     step: '02',
@@ -389,7 +388,7 @@ export const orionTechnicalDetails = [
     items: [
       'GPS, sensores de conducción y conectividad celular',
       'Almacenamiento local con sync a Connect',
-      'Instalación ruggedizada para vehículos comerciales',
+      'Instalación resistente para vehículos comerciales',
     ],
   },
   {

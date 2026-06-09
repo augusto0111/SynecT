@@ -1,241 +1,58 @@
-import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
-import { TechDemoPanelStack } from './tech/TechDemoPanelStack'
-import { stackDemoPanels } from '../lib/tech/stackDemoPanels'
-import { useReducedMotion } from '../hooks/useReducedMotion'
+import { homeHero } from '../lib/copy/home'
+import { HomeSectionLink } from './HomeSectionLink'
+import { SynectLogo } from './SynectLogo'
 
-function ParticleField() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const reducedMotion = useReducedMotion()
-
-  useEffect(() => {
-    if (reducedMotion) return
-
-    const desktop = window.matchMedia('(min-width: 1024px)')
-    if (!desktop.matches) return
-
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    let animationId: number
-    const particles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-      alpha: number
-    }> = []
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
-    }
-
-    const init = () => {
-      particles.length = 0
-      const count = Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 12000)
-      for (let i = 0; i < Math.max(count, 40); i++) {
-        particles.push({
-          x: Math.random() * canvas.offsetWidth,
-          y: Math.random() * canvas.offsetHeight,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size: Math.random() * 2 + 0.5,
-          alpha: Math.random() * 0.5 + 0.1,
-        })
-      }
-    }
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
-
-      particles.forEach((p, i) => {
-        p.x += p.vx
-        p.y += p.vy
-        if (p.x < 0 || p.x > canvas.offsetWidth) p.vx *= -1
-        if (p.y < 0 || p.y > canvas.offsetHeight) p.vy *= -1
-
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 107, 0, ${p.alpha})`
-        ctx.fill()
-
-        particles.slice(i + 1).forEach((p2) => {
-          const dx = p.x - p2.x
-          const dy = p.y - p2.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 120) {
-            ctx.beginPath()
-            ctx.moveTo(p.x, p.y)
-            ctx.lineTo(p2.x, p2.y)
-            ctx.strokeStyle = `rgba(255, 107, 0, ${0.08 * (1 - dist / 120)})`
-            ctx.lineWidth = 0.5
-            ctx.stroke()
-          }
-        })
-      })
-
-      animationId = requestAnimationFrame(draw)
-    }
-
-    resize()
-    init()
-    draw()
-
-    window.addEventListener('resize', () => {
-      resize()
-      init()
-    })
-
-    return () => {
-      cancelAnimationFrame(animationId)
-    }
-  }, [reducedMotion])
-
-  if (reducedMotion) return null
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-full w-full opacity-60"
-      aria-hidden="true"
-    />
-  )
-}
-
-function HeroVisual() {
-  return (
-    <TechDemoPanelStack panels={stackDemoPanels.slice(0, 3)} className="tech-demo-stack" />
-  )
+function fadeUp(delay: number) {
+  return {
+    initial: { opacity: 0, y: 14 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.55, delay },
+  }
 }
 
 export function Hero() {
   return (
-    <section className="section-seamless-bottom relative min-h-screen overflow-hidden pt-28 pb-20">
-      <div className="aurora-bg absolute inset-0" />
-      <div className="noise-overlay absolute inset-0" />
-      <div className="absolute inset-0 grid-bg opacity-60" />
-      <div className="absolute top-1/4 left-1/2 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-synect-orange/12 blur-[140px]" />
-      <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-synect-orange/8 blur-[120px]" />
-      <div className="absolute top-1/2 left-0 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-synect-orange/5 blur-[100px]" />
-      <ParticleField />
-
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-5 flex flex-wrap items-center gap-2"
-            >
-              <span className="tech-badge">
-                <span className="h-1.5 w-1.5 bg-synect-orange animate-pulse-glow" />
-                SYNECT · INDUSTRIAL IA
-              </span>
-              <span className="tech-stack-tag">
-                <em>HW</em> · SW · IA
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.75rem]"
-            >
-              Inteligencia industrial
-              <br />
-              <span className="text-gradient-orange glow-text">con stack propio</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="mt-5 max-w-xl text-lg font-medium leading-snug text-neutral-200"
-            >
-              Sensores, pantallas en planta, plataforma de datos e IA predictiva — diseñados
-              juntos para operaciones en fábrica y en ruta.
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-3 max-w-lg text-sm leading-relaxed text-neutral-500"
-            >
-              <span className="text-neutral-400">SynecT</span> es la plataforma ·{' '}
-              <span className="text-neutral-400">VISION</span> para planta ·{' '}
-              <span className="text-neutral-400">ORION</span> para flota
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-10 flex flex-wrap gap-4"
-            >
-              <a href="#contacto" className="tech-btn-primary group">
-                Solicitar demo
-                <ArrowRight
-                  size={14}
-                  className="transition-transform group-hover:translate-x-1"
-                />
-              </a>
-              <a href="#ecosistema" className="tech-btn-ghost">
-                Ver productos
-              </a>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="mt-14 grid grid-cols-3 gap-4 border-t border-white/[0.06] pt-8"
-            >
-              {[
-                { value: 'HW+SW+IA', label: 'Stack integrado' },
-                { value: '24/7', label: 'Monitoreo' },
-                { value: 'EDGE', label: 'Planta + flota' },
-              ].map((stat) => (
-                <div key={stat.label} className="tech-panel px-3 py-3">
-                  <p className="tech-stat-value">{stat.value}</p>
-                  <p className="tech-stat-label">{stat.label}</p>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative"
-          >
-            <HeroVisual />
-          </motion.div>
-        </div>
-      </div>
-
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="flex flex-col items-center gap-2"
-        >
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-neutral-600">
-            scroll ↓
-          </span>
-          <div className="h-8 w-px bg-gradient-to-b from-synect-orange/50 to-transparent" />
+    <section
+      id="inicio"
+      className="home-viewport-section relative flex flex-col items-center justify-center px-6 py-20 sm:px-8"
+      aria-labelledby="hero-heading"
+    >
+      <div className="relative z-[1] flex max-w-4xl flex-col items-center text-center">
+        <motion.div {...fadeUp(0.12)}>
+          <SynectLogo size="lg" />
         </motion.div>
+
+        <motion.h1
+          {...fadeUp(0.2)}
+          id="hero-heading"
+          className="mt-8 text-[clamp(2rem,5.5vw,3.75rem)] font-semibold leading-[1.08] tracking-tight"
+        >
+          <span className="block text-white">{homeHero.title}</span>
+          <span className="text-gradient mt-1 block">{homeHero.titleAccent}</span>
+        </motion.h1>
+
+        <motion.p
+          {...fadeUp(0.28)}
+          className="mt-6 max-w-2xl text-base leading-relaxed text-neutral-500 sm:text-lg"
+        >
+          {homeHero.intro}
+        </motion.p>
       </div>
+
+      <HomeSectionLink
+        section="synect"
+        className="absolute bottom-10 left-1/2 z-[1] flex -translate-x-1/2 flex-col items-center gap-2 text-neutral-600 transition-colors hover:text-neutral-400 sm:bottom-12"
+        aria-label="Ver catálogo de productos"
+      >
+        <span className="text-sm text-neutral-500">Ver catálogo</span>
+        <span className="block h-8 w-px bg-neutral-700" />
+      </HomeSectionLink>
+
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-32 bg-gradient-to-t from-black to-transparent"
+        aria-hidden="true"
+      />
     </section>
   )
 }

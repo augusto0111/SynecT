@@ -1,41 +1,17 @@
-import { TechShell } from './components/tech/TechShell'
-import { TechMarquee } from './components/tech/TechMarquee'
-import { Navbar } from './components/Navbar'
-import { Hero } from './components/Hero'
-import { SocialProof } from './components/SocialProof'
-import { WhatIsSynecT } from './components/WhatIsSynecT'
-import { ComparisonSection } from './components/ComparisonSection'
-import { SynectEcosystem } from './components/SynectEcosystem'
-import { TechnologyBenefitsSection } from './components/TechnologyBenefitsSection'
-import { TrustSection } from './components/TrustSection'
-import { About } from './components/About'
-import { Contact } from './components/Contact'
-import { Footer } from './components/Footer'
-import { SectionProgress } from './components/SectionProgress'
-
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom'
+import { SiteLayout } from './layouts/SiteLayout'
+import { HomePage } from './pages/HomePage'
 function App() {
   return (
-    <>
-      <a href="#contenido-principal" className="skip-link">
-        Ir al contenido principal
-      </a>
-      <TechShell />
-      <Navbar />
-      <main id="contenido-principal" className="relative z-10 pb-16 lg:pb-0">
-        <Hero />
-        <TechMarquee />
-        <SocialProof />
-        <WhatIsSynecT />
-        <ComparisonSection />
-        <SynectEcosystem />
-        <TechnologyBenefitsSection />
-        <TrustSection />
-        <About />
-        <Contact />
-      </main>
-      <SectionProgress />
-      <Footer />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<SiteLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="vision" element={<Navigate to="/#synect" replace />} />
+          <Route path="orion" element={<Navigate to="/#orion-catalog" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 

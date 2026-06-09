@@ -1,21 +1,29 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { useActiveSection } from '../hooks/useActiveSection'
+import { HomeSectionLink } from './HomeSectionLink'
+import { SynectLogo } from './SynectLogo'
+import type { HomeSectionId } from '../lib/navigation/homeScroll'
 
-const links = [
-  { href: '#que-es-synect', id: 'que-es-synect', label: 'SynecT' },
-  { href: '#ecosistema', id: 'ecosistema', label: 'Productos' },
-  { href: '#beneficios', id: 'beneficios', label: 'Beneficios' },
-  { href: '#contacto', id: 'contacto', label: 'Contacto' },
+const links: { section: HomeSectionId; label: string }[] = [
+  { section: 'inicio', label: 'Inicio' },
+  { section: 'synect', label: 'VISION' },
+  { section: 'orion-catalog', label: 'ORION' },
 ]
 
-const sectionIds = links.map((l) => l.id)
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `rounded-sm px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 ${
+    isActive ? 'text-synect-orange' : 'text-neutral-500 hover:text-white'
+  }`
+
+const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `block font-mono text-sm uppercase tracking-wider ${
+    isActive ? 'text-synect-orange' : 'text-neutral-300'
+  }`
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const activeSection = useActiveSection(sectionIds)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -30,12 +38,11 @@ export function Navbar() {
     }
   }, [mobileOpen])
 
+  const closeMobile = () => setMobileOpen(false)
+
   return (
     <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+      <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? 'glass-strong border-b border-white/[0.06] py-2.5'
@@ -46,35 +53,35 @@ export function Navbar() {
           className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8"
           aria-label="Navegación principal"
         >
-          <a href="#" className="text-lg font-bold tracking-tight">
-            Synec<span className="text-synect-orange">T</span>
-          </a>
+          <HomeSectionLink section="inicio" className="inline-block">
+            <SynectLogo size="sm" />
+          </HomeSectionLink>
 
           <ul className="hidden items-center gap-1 lg:flex">
             {links.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className={`rounded-sm px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-synect-orange/50 ${
-                    activeSection === link.id
-                      ? 'text-synect-orange'
-                      : 'text-neutral-500 hover:text-white'
-                  }`}
-                  aria-current={activeSection === link.id ? 'true' : undefined}
-                >
+              <li key={link.section}>
+                <HomeSectionLink section={link.section} className={navLinkClass}>
                   {link.label}
-                </a>
+                </HomeSectionLink>
               </li>
             ))}
+            <li>
+              <HomeSectionLink section="contacto" className={navLinkClass}>
+                Contacto
+              </HomeSectionLink>
+            </li>
           </ul>
 
           <div className="hidden items-center gap-3 lg:flex">
             <span className="tech-stack-tag hidden xl:inline">
-              <em>HW</em> · SW · IA
+              Equipos · Programas · IA
             </span>
-            <a href="#contacto" className="tech-btn-primary !py-2 !px-4 !text-[11px]">
+            <HomeSectionLink
+              section="contacto"
+              className="tech-btn-primary !py-2 !px-4 !text-[11px]"
+            >
               Demo
-            </a>
+            </HomeSectionLink>
           </div>
 
           <button
@@ -88,17 +95,6 @@ export function Navbar() {
           </button>
         </nav>
 
-        {scrolled && (
-          <div
-            className="mx-auto hidden max-w-7xl border-t border-white/[0.04] px-6 py-1.5 lg:block lg:px-8"
-            aria-hidden="true"
-          >
-            <p className="font-mono text-[9px] uppercase tracking-widest text-neutral-600">
-              STACK :: hardware en campo · software operativo · IA predictiva · planta + flota
-            </p>
-          </div>
-        )}
-
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
@@ -109,43 +105,50 @@ export function Navbar() {
             >
               <ul className="flex flex-col gap-4 px-6 py-6">
                 {links.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      className={`block font-mono text-sm uppercase tracking-wider ${
-                        activeSection === link.id ? 'text-synect-orange' : 'text-neutral-300'
-                      }`}
-                      onClick={() => setMobileOpen(false)}
+                  <li key={link.section}>
+                    <HomeSectionLink
+                      section={link.section}
+                      className={mobileLinkClass}
+                      onNavigate={closeMobile}
                     >
                       {link.label}
-                    </a>
+                    </HomeSectionLink>
                   </li>
                 ))}
                 <li>
-                  <a
-                    href="#contacto"
+                  <HomeSectionLink
+                    section="contacto"
+                    className={mobileLinkClass}
+                    onNavigate={closeMobile}
+                  >
+                    Contacto
+                  </HomeSectionLink>
+                </li>
+                <li>
+                  <HomeSectionLink
+                    section="contacto"
                     className="tech-btn-primary block text-center"
-                    onClick={() => setMobileOpen(false)}
+                    onNavigate={closeMobile}
                   >
                     Solicitar demo
-                  </a>
+                  </HomeSectionLink>
                 </li>
               </ul>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
 
       <div
-        className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#050505]/95 p-3 backdrop-blur-lg lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/[0.06] bg-black/95 p-3 backdrop-blur-lg lg:hidden"
         aria-hidden={false}
       >
-        <a
-          href="#contacto"
+        <HomeSectionLink
+          section="contacto"
           className="tech-btn-primary flex w-full items-center justify-center !py-3"
         >
           Solicitar demo
-        </a>
+        </HomeSectionLink>
       </div>
     </>
   )
