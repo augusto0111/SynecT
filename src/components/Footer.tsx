@@ -37,7 +37,6 @@ export function Footer() {
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-neutral-500">
               {homeHero.intro}
             </p>
-            <span className="tech-stack-tag mt-4 inline-block">Equipos · Programas · IA</span>
             <a
               href="mailto:contacto@synect.io"
               className="mt-4 block text-sm text-neutral-400 transition-colors hover:text-synect-orange-light"
@@ -92,9 +91,9 @@ export function Footer() {
               </p>
               <HomeSectionLink
                 section="contacto"
-                className="tech-btn-primary mt-5 inline-flex !px-4 !py-2 !text-[11px]"
+                className="mt-5 inline-flex rounded-sm border border-white/[0.08] px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500 transition-colors hover:border-white/15 hover:text-white"
               >
-                Solicitar demo
+                Ir a contacto
               </HomeSectionLink>
             </div>
           </div>

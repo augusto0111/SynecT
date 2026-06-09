@@ -1,11 +1,21 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useInView } from '../../hooks/useInView'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { applyHardwareMaterialTweaks } from '../../lib/hardware/materialTweaks'
-import { visionModelSrc } from '../../lib/hardware/models'
+import { orionModelSrc, visionModelSrc } from '../../lib/hardware/models'
+import { dispatchLayoutSync, LAYOUT_SYNC_EVENT } from '../../lib/layout/sync'
 
 type HardwareModelStageProps = {
   modelUrl?: string
@@ -14,6 +24,12 @@ type HardwareModelStageProps = {
   fallbackAlt?: string
   /** Rotación inicial en radianes (eje Y) */
   rotationY?: number
+}
+
+function readShellSize(shell: HTMLElement) {
+  const width = Math.round(shell.clientWidth)
+  const height = Math.round(shell.clientHeight)
+  return { width, height }
 }
 
 function centerAndScale(object: THREE.Object3D, targetSize = 1.05) {
@@ -49,6 +65,65 @@ function buildCenteredPivot(scene: THREE.Object3D, rotationY: number, targetSize
   return pivot
 }
 
+function CanvasResizeSync({ shellRef }: { shellRef: RefObject<HTMLDivElement | null> }) {
+  const camera = useThree((state) => state.camera)
+  const gl = useThree((state) => state.gl)
+  const setSize = useThree((state) => state.setSize)
+  const setDpr = useThree((state) => state.setDpr)
+  const invalidate = useThree((state) => state.invalidate)
+
+  useLayoutEffect(() => {
+    const shell = shellRef.current
+    if (!shell) return
+
+    const apply = () => {
+      const { width, height } = readShellSize(shell)
+      if (width < 2 || height < 2) return
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      setDpr(dpr)
+      setSize(width, height)
+
+      if (camera instanceof THREE.PerspectiveCamera) {
+        camera.aspect = width / height
+        camera.updateProjectionMatrix()
+      }
+
+      gl.setPixelRatio(dpr)
+      invalidate()
+    }
+
+    apply()
+
+    const delayed = [50, 150, 400, 900].map((ms) => window.setTimeout(apply, ms))
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(apply)
+    })
+
+    const observer = new ResizeObserver(apply)
+    observer.observe(shell)
+
+    window.addEventListener('scroll', apply, { passive: true })
+    window.addEventListener('resize', apply, { passive: true })
+    window.addEventListener(LAYOUT_SYNC_EVENT, apply)
+    window.visualViewport?.addEventListener('resize', apply)
+    window.visualViewport?.addEventListener('scroll', apply)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      delayed.forEach((id) => window.clearTimeout(id))
+      observer.disconnect()
+      window.removeEventListener('scroll', apply)
+      window.removeEventListener('resize', apply)
+      window.removeEventListener(LAYOUT_SYNC_EVENT, apply)
+      window.visualViewport?.removeEventListener('resize', apply)
+      window.visualViewport?.removeEventListener('scroll', apply)
+    }
+  }, [shellRef, camera, gl, setSize, setDpr, invalidate])
+
+  return null
+}
+
 function ProductModel({
   url,
   rotationY = 0,
@@ -77,14 +152,17 @@ function ModelScene({
   rotationY,
   autoRotate,
   onReady,
+  shellRef,
 }: {
   modelUrl: string
   rotationY?: number
   autoRotate: boolean
   onReady: () => void
+  shellRef: RefObject<HTMLDivElement | null>
 }) {
   return (
     <>
+      <CanvasResizeSync shellRef={shellRef} />
       <ambientLight intensity={0.85} />
       <hemisphereLight args={['#b8b8b8', '#1a1a1a', 0.95]} />
       <directionalLight position={[4, 6, 4]} intensity={1.85} />
@@ -116,48 +194,65 @@ export function HardwareModelStage({
 }: HardwareModelStageProps) {
   const reducedMotion = useReducedMotion()
   const containerRef = useRef<HTMLDivElement>(null)
+  const shellRef = useRef<HTMLDivElement>(null)
   const inView = useInView(containerRef)
+  const [mounted, setMounted] = useState(false)
   const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    if (inView) setMounted(true)
+  }, [inView])
 
   useEffect(() => {
     if (!inView) setReady(false)
   }, [inView, modelUrl])
 
+  const handleReady = useCallback(() => {
+    setReady(true)
+    dispatchLayoutSync()
+  }, [])
+
   return (
     <div ref={containerRef} className="hardware-model-stage">
       <div className="hardware-model-stage-inner">
-        {inView && !ready && (
+        {mounted && !ready && (
           <p className="hardware-model-loading font-mono text-[10px] text-neutral-600">
             Cargando modelo…
           </p>
         )}
 
-        {inView && (
-          <Canvas
-            key={modelUrl}
-            className="hardware-model-canvas"
-            aria-label={fallbackAlt ?? `Modelo 3D ${code} — ${caption}`}
-            camera={{ position: [0, 0.05, 1.8], fov: 45, near: 0.01, far: 100 }}
-            dpr={[1, 1.5]}
-            gl={{
-              alpha: true,
-              antialias: true,
-              powerPreference: 'high-performance',
-              toneMapping: THREE.ACESFilmicToneMapping,
-            }}
-            onCreated={({ gl }) => {
-              gl.setClearColor(0x000000, 0)
-            }}
-          >
-            <Suspense fallback={null}>
-              <ModelScene
-                modelUrl={modelUrl}
-                rotationY={rotationY}
-                autoRotate={!reducedMotion}
-                onReady={() => setReady(true)}
-              />
-            </Suspense>
-          </Canvas>
+        {mounted && (
+          <div ref={shellRef} className="hardware-model-canvas-shell">
+            <Canvas
+              key={modelUrl}
+              className="hardware-model-canvas"
+              aria-label={fallbackAlt ?? `Modelo 3D ${code} — ${caption}`}
+              camera={{ position: [0, 0.05, 1.8], fov: 45, near: 0.01, far: 100 }}
+              dpr={[1, 2]}
+              frameloop={inView ? 'always' : 'never'}
+              gl={{
+                alpha: true,
+                antialias: true,
+                powerPreference: 'default',
+              }}
+              onCreated={({ gl }) => {
+                gl.setClearColor(0x000000, 0)
+                gl.outputColorSpace = THREE.SRGBColorSpace
+                gl.toneMapping = THREE.ACESFilmicToneMapping
+                gl.toneMappingExposure = 1
+              }}
+            >
+              <Suspense fallback={null}>
+                <ModelScene
+                  modelUrl={modelUrl}
+                  rotationY={rotationY}
+                  autoRotate={inView && !reducedMotion}
+                  onReady={handleReady}
+                  shellRef={shellRef}
+                />
+              </Suspense>
+            </Canvas>
+          </div>
         )}
       </div>
     </div>
@@ -165,3 +260,4 @@ export function HardwareModelStage({
 }
 
 useGLTF.preload(visionModelSrc)
+useGLTF.preload(orionModelSrc)

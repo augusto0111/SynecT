@@ -57,7 +57,7 @@ export function Navbar() {
             <SynectLogo size="sm" />
           </HomeSectionLink>
 
-          <ul className="hidden items-center gap-1 lg:flex">
+          <ul className="hidden items-center gap-1 lg:ml-auto lg:flex">
             {links.map((link) => (
               <li key={link.section}>
                 <HomeSectionLink section={link.section} className={navLinkClass}>
@@ -71,18 +71,6 @@ export function Navbar() {
               </HomeSectionLink>
             </li>
           </ul>
-
-          <div className="hidden items-center gap-3 lg:flex">
-            <span className="tech-stack-tag hidden xl:inline">
-              Equipos · Programas · IA
-            </span>
-            <HomeSectionLink
-              section="contacto"
-              className="tech-btn-primary !py-2 !px-4 !text-[11px]"
-            >
-              Demo
-            </HomeSectionLink>
-          </div>
 
           <button
             type="button"
@@ -124,15 +112,6 @@ export function Navbar() {
                     Contacto
                   </HomeSectionLink>
                 </li>
-                <li>
-                  <HomeSectionLink
-                    section="contacto"
-                    className="tech-btn-primary block text-center"
-                    onNavigate={closeMobile}
-                  >
-                    Solicitar demo
-                  </HomeSectionLink>
-                </li>
               </ul>
             </motion.div>
           )}
@@ -145,9 +124,9 @@ export function Navbar() {
       >
         <HomeSectionLink
           section="contacto"
-          className="tech-btn-primary flex w-full items-center justify-center !py-3"
+          className="flex w-full items-center justify-center rounded-sm border border-white/[0.08] bg-white/[0.02] py-3 font-mono text-[11px] uppercase tracking-wider text-neutral-500 transition-colors hover:border-white/15 hover:text-white"
         >
-          Solicitar demo
+          Contacto
         </HomeSectionLink>
       </div>
     </>
