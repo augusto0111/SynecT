@@ -159,6 +159,29 @@ html:has(.home-scroll-snap) {
   height: 100% !important;
 }
 
+.hardware-model-hint {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  background: rgb(0 0 0 / 0.45);
+  color: rgb(255 255 255 / 0.55);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.25s ease;
+}
+
+.hardware-model-stage-inner:has(.hardware-model-canvas:active) .hardware-model-hint {
+  opacity: 0;
+}
+
 .hardware-model-canvas {
   touch-action: none;
   cursor: grab;

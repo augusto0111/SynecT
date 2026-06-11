@@ -174,6 +174,7 @@ export function OrionShowroomSection() {
                 <HardwareModelStage
                   modelUrl={orionModelSrc}
                   rotationY={Math.PI}
+                  rotationZ={Math.PI / 2}
                   code="SY-ORION-FC"
                   caption="Tablet resistente · control de flotas"
                   fallbackAlt="ORION — tablet resistente con control de flotas"

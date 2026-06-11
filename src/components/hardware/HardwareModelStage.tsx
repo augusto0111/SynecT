@@ -9,11 +9,18 @@ import {
   type RefObject,
 } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
-import { OrbitControls, useGLTF } from '@react-three/drei'
+import { OrbitControls, useGLTF, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
+import orionScreenUrl from '../../assets/products/orion-screen.png'
+import visionScreenUrl from '../../assets/products/vision-screen.png'
 import { useInView } from '../../hooks/useInView'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
-import { applyHardwareMaterialTweaks } from '../../lib/hardware/materialTweaks'
+import {
+  applyHardwareMaterialTweaks,
+  applyVisionScreenTexture,
+  generateVisionScreenUvs,
+} from '../../lib/hardware/materialTweaks'
+import { attachOrionScreenOverlay } from '../../lib/hardware/orionScreenOverlay'
 import { orionModelSrc, visionModelSrc } from '../../lib/hardware/models'
 import { dispatchLayoutSync, LAYOUT_SYNC_EVENT } from '../../lib/layout/sync'
 
@@ -24,6 +31,8 @@ type HardwareModelStageProps = {
   fallbackAlt?: string
   /** Rotación inicial en radianes (eje Y) */
   rotationY?: number
+  /** Rotación inicial en radianes (eje Z, antihorario = positivo) */
+  rotationZ?: number
 }
 
 function readShellSize(shell: HTMLElement) {
@@ -48,19 +57,47 @@ function centerAndScale(object: THREE.Object3D, targetSize = 1.05) {
   object.position.sub(centered.getCenter(new THREE.Vector3()))
 }
 
-function buildCenteredPivot(scene: THREE.Object3D, rotationY: number, targetSize = 1.05) {
+function buildCenteredPivot(
+  scene: THREE.Object3D,
+  rotationY: number,
+  rotationZ: number,
+  options?: {
+    visionScreenTexture?: THREE.Texture
+    orionScreenTexture?: THREE.Texture
+    targetSize?: number
+  },
+) {
+  const targetSize = options?.targetSize ?? 1.05
   const pivot = new THREE.Group()
   const model = scene.clone(true)
 
   model.traverse((child) => {
     if (!(child instanceof THREE.Mesh)) return
     const mats = Array.isArray(child.material) ? child.material : [child.material]
-    mats.forEach(applyHardwareMaterialTweaks)
+    const isVisionScreen =
+      child.name === 'Solid3_2' || mats.some((mat) => mat.name === 'SmokedDark')
+
+    if (isVisionScreen && options?.visionScreenTexture) {
+      generateVisionScreenUvs(child.geometry)
+    }
+
+    mats.forEach((mat) => {
+      applyHardwareMaterialTweaks(mat)
+      if (options?.visionScreenTexture && mat.name === 'SmokedDark') {
+        applyVisionScreenTexture(mat, options.visionScreenTexture)
+      }
+    })
   })
 
   pivot.add(model)
   centerAndScale(model, targetSize)
+
+  if (options?.orionScreenTexture) {
+    attachOrionScreenOverlay(model, options.orionScreenTexture)
+  }
+
   pivot.rotation.y = rotationY
+  pivot.rotation.z = rotationZ
 
   return pivot
 }
@@ -124,20 +161,46 @@ function CanvasResizeSync({ shellRef }: { shellRef: RefObject<HTMLDivElement | n
   return null
 }
 
+function ModelOrbitControls({ reducedMotion }: { reducedMotion: boolean }) {
+  return (
+    <OrbitControls
+      makeDefault
+      enableZoom={false}
+      enablePan={false}
+      autoRotate={false}
+      enableDamping={!reducedMotion}
+      dampingFactor={reducedMotion ? 1 : 0.07}
+      rotateSpeed={0.72}
+      minPolarAngle={Math.PI * 0.38}
+      maxPolarAngle={Math.PI * 0.62}
+    />
+  )
+}
+
 function ProductModel({
   url,
   rotationY = 0,
+  rotationZ = 0,
   onReady,
 }: {
   url: string
   rotationY?: number
+  rotationZ?: number
   onReady: () => void
 }) {
   const { scene } = useGLTF(url)
+  const visionScreenTexture = useTexture(visionScreenUrl)
+  const orionScreenTexture = useTexture(orionScreenUrl)
+  const isVision = url === visionModelSrc
+  const isOrion = url === orionModelSrc
 
   const model = useMemo(
-    () => buildCenteredPivot(scene, rotationY),
-    [scene, rotationY],
+    () =>
+      buildCenteredPivot(scene, rotationY, rotationZ, {
+        visionScreenTexture: isVision ? visionScreenTexture : undefined,
+        orionScreenTexture: isOrion ? orionScreenTexture : undefined,
+      }),
+    [scene, rotationY, rotationZ, isVision, isOrion, visionScreenTexture, orionScreenTexture],
   )
 
   useEffect(() => {
@@ -150,36 +213,37 @@ function ProductModel({
 function ModelScene({
   modelUrl,
   rotationY,
-  autoRotate,
+  rotationZ,
+  reducedMotion,
   onReady,
   shellRef,
 }: {
   modelUrl: string
   rotationY?: number
-  autoRotate: boolean
+  rotationZ?: number
+  reducedMotion: boolean
   onReady: () => void
   shellRef: RefObject<HTMLDivElement | null>
 }) {
   return (
     <>
       <CanvasResizeSync shellRef={shellRef} />
-      <ambientLight intensity={0.85} />
-      <hemisphereLight args={['#b8b8b8', '#1a1a1a', 0.95]} />
-      <directionalLight position={[4, 6, 4]} intensity={1.85} />
-      <directionalLight position={[-4, 3, -3]} intensity={0.75} />
-      <directionalLight position={[-3, 2, -2]} intensity={0.55} color="#ff6520" />
-      <directionalLight position={[0, -2, 4]} intensity={0.45} />
-      <pointLight position={[0, 1.5, 2.5]} intensity={1.1} />
-      <pointLight position={[-2, 0.5, 1.5]} intensity={0.5} color="#ffe8dc" />
-      <ProductModel url={modelUrl} rotationY={rotationY} onReady={onReady} />
-      <OrbitControls
-        target={[0, 0, 0]}
-        enablePan={false}
-        enableZoom={false}
-        minPolarAngle={Math.PI / 3.5}
-        maxPolarAngle={Math.PI / 2.05}
-        autoRotate={autoRotate}
-        autoRotateSpeed={0.9}
+      <ModelOrbitControls reducedMotion={reducedMotion} />
+      <ambientLight intensity={1.2} />
+      <hemisphereLight args={['#d0d0d0', '#080808', 1.4]} />
+      <directionalLight position={[5, 7, 6]} intensity={3.1} />
+      <directionalLight position={[-6, 4, 3]} intensity={1.5} />
+      <directionalLight position={[0, 3, -6]} intensity={1} color="#9eb0c4" />
+      <directionalLight position={[0, 1.5, 7]} intensity={2.1} />
+      <directionalLight position={[-3, 2, 4]} intensity={0.75} color="#ff7540" />
+      <directionalLight position={[0, -2, 4]} intensity={0.55} />
+      <pointLight position={[2, 2, 3.5]} intensity={2} distance={10} decay={2} />
+      <pointLight position={[-2, 1, 2.5]} intensity={1.3} color="#fff0e6" distance={10} decay={2} />
+      <ProductModel
+        url={modelUrl}
+        rotationY={rotationY}
+        rotationZ={rotationZ}
+        onReady={onReady}
       />
     </>
   )
@@ -191,6 +255,7 @@ export function HardwareModelStage({
   caption,
   fallbackAlt,
   rotationY = 0,
+  rotationZ = 0,
 }: HardwareModelStageProps) {
   const reducedMotion = useReducedMotion()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -209,6 +274,9 @@ export function HardwareModelStage({
   return (
     <div ref={containerRef} className="hardware-model-stage">
       <div className="hardware-model-stage-inner">
+        <p className="hardware-model-hint" aria-hidden="true">
+          Arrastrá para explorar
+        </p>
         {mounted && (
           <div ref={shellRef} className="hardware-model-canvas-shell">
             <Canvas
@@ -227,14 +295,15 @@ export function HardwareModelStage({
                 gl.setClearColor(0x000000, 0)
                 gl.outputColorSpace = THREE.SRGBColorSpace
                 gl.toneMapping = THREE.ACESFilmicToneMapping
-                gl.toneMappingExposure = 1
+                gl.toneMappingExposure = 1.55
               }}
             >
               <Suspense fallback={null}>
                 <ModelScene
                   modelUrl={modelUrl}
                   rotationY={rotationY}
-                  autoRotate={inView && !reducedMotion}
+                  rotationZ={rotationZ}
+                  reducedMotion={reducedMotion}
                   onReady={handleReady}
                   shellRef={shellRef}
                 />
@@ -249,3 +318,5 @@ export function HardwareModelStage({
 
 useGLTF.preload(visionModelSrc)
 useGLTF.preload(orionModelSrc)
+useTexture.preload(visionScreenUrl)
+useTexture.preload(orionScreenUrl)
